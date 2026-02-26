@@ -40,15 +40,16 @@
             text-align: center;
             margin: 1rem 0;
         }
-        #ad-player {
-            width: 100%;
-            height: 315px;
-            background-color: #000;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
+        .ad-info {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        /* Button container to align both buttons consistently */
+        .btn-container {
+            margin: 1rem 0;
+            /* Ensures buttons take the same width and align vertically */
+            display: inline-block;
+            text-align: left;
         }
         .btn {
             background-color: #2563eb;
@@ -58,15 +59,26 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
+            /* Fixed width for alignment */
+            width: 200px;
+            margin: 0.5rem 0;
         }
         .btn:disabled {
             background-color: #94a3b8;
             cursor: not-allowed;
         }
+        .timer {
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 4px;
+            display: none;
+        }
         .reward-info {
             color: #16a34a;
             font-weight: bold;
             margin-top: 1rem;
+            display: none;
         }
         footer {
             text-align: center;
@@ -79,7 +91,7 @@
 <body>
     <header>
         <h1>Watch Ads & Earn Rewards</h1>
-        <p>Watch ads legally to get points or rewards</p>
+        <p>Visit ad links to get points or rewards</p>
     </header>
 
     <div class="container">
@@ -92,25 +104,32 @@
         <div class="card">
             <h2>Watch Ads Now</h2>
             <div class="ad-section">
-                <div id="ad-player">
-                    Ad will load here
+                <div class="ad-info">
+                    <p>Click the button below to open the ad link in a new tab.</p>
+                    <p>Please stay on the ad page for at least <strong>30 seconds</strong> to earn points.</p>
                 </div>
-                <button id="start-ad-btn" class="btn" onclick="startAd()">Start Watching Ad</button>
-                <div id="timer" style="display: none; margin: 1rem 0;">
-                    Time Remaining: <span id="time-left">30</span> seconds
+                
+                <!-- Button container for alignment -->
+                <div class="btn-container">
+                    <button id="start-ad-btn" class="btn" onclick="openAdLink()">Start Watching Ad</button>
+                    <button id="claim-btn" class="btn" style="display: none;" onclick="claimReward()">Claim Points</button>
                 </div>
-                <button id="claim-btn" class="btn" style="display: none;" onclick="claimReward()">Claim Points</button>
-                <div class="reward-info" id="reward-msg" style="display: none;"></div>
+                
+                <div class="timer" id="timer">
+                    Required viewing time remaining: <span id="time-left">30</span> seconds
+                </div>
+                
+                <div class="reward-info" id="reward-msg"></div>
             </div>
         </div>
 
         <div class="card">
             <h2>Important Rules</h2>
             <ul>
-                <li>Only watch ads through the provided system</li>
-                <li>Using tools to skip ads is not allowed</li>
-                <li>Points will be recorded after the ad is fully watched</li>
-                <li>All activities must comply with laws and ad platform policies</li>
+                <li>Ad will open in a new tab - do not close it before the timer ends</li>
+                <li>You must stay on the ad page for the full required time</li>
+                <li>Points can only be claimed after the timer completes</li>
+                <li>All activities must comply with laws and ad provider policies</li>
             </ul>
         </div>
     </div>
@@ -123,18 +142,21 @@
         let userPoints = 0;
         let adTimer;
         let timeRemaining = 30;
+        // Replace with your actual ad direct link
+        const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
 
         function updatePointsDisplay() {
             document.getElementById('points').textContent = userPoints;
         }
 
-        function startAd() {
+        function openAdLink() {
             const startBtn = document.getElementById('start-ad-btn');
             const timer = document.getElementById('timer');
-            const adPlayer = document.getElementById('ad-player');
             
-            // Simulate ad loading
-            adPlayer.innerHTML = '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+            // Open ad link in new tab
+            window.open(AD_DIRECT_LINK, '_blank');
+            
+            // Disable start button and show timer
             startBtn.disabled = true;
             timer.style.display = 'block';
             
@@ -147,7 +169,6 @@
                     clearInterval(adTimer);
                     timer.style.display = 'none';
                     document.getElementById('claim-btn').style.display = 'block';
-                    adPlayer.innerHTML = 'Ad completed';
                 }
             }, 1000);
         }
@@ -170,4 +191,3 @@
     </script>
 </body>
 </html>
-
