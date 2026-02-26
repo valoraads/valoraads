@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Ads - Earn LTC</title>
+    <title>Watch Ads - Earn & Withdraw LTC</title>
     <style>
         * {
             margin: 0;
@@ -71,16 +71,50 @@
             border-radius: 4px;
             display: none;
         }
-        .reward-info {
+        .reward-info, .withdrawal-status {
             color: #16a34a;
             font-weight: bold;
             margin-top: 1rem;
             display: none;
         }
-        /* Style for LTC display */
         .ltc-display {
             font-family: 'Courier New', monospace;
             color: #0066cc;
+        }
+        /* Withdrawal section styles */
+        .withdrawal-section {
+            border: 2px dashed #16a34a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .withdrawal-section h3 {
+            margin-bottom: 1rem;
+            color: #16a34a;
+        }
+        .form-group {
+            margin: 1rem 0;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.9rem;
+            display: none;
         }
         footer {
             text-align: center;
@@ -93,14 +127,14 @@
 <body>
     <header>
         <h1>Watch Ads & Earn Litecoin (LTC)</h1>
-        <p>Visit ad links to get random LTC rewards</p>
+        <p>Visit ad links to earn rewards & withdraw to your wallet</p>
     </header>
 
     <div class="container">
         <div class="card">
             <h2>Your Account Information</h2>
             <p>Username: <span id="username">New User</span></p>
-            <p>Total LTC Earned: <span id="total-ltc" class="ltc-display">0.00000000</span> LTC</p>
+            <p>Available LTC Balance: <span id="total-ltc" class="ltc-display">0.00000000</span> LTC</p>
         </div>
 
         <div class="card">
@@ -123,7 +157,23 @@
                 
                 <div class="reward-info" id="reward-msg">
                     <p>Earned this session: <span id="session-reward" class="ltc-display">0.00000000</span> LTC</p>
-                    <p>Updated total: <span id="updated-total" class="ltc-display">0.00000000</span> LTC</p>
+                    <p>Updated balance: <span id="updated-total" class="ltc-display">0.00000000</span> LTC</p>
+                </div>
+            </div>
+
+            <!-- Withdrawal Section -->
+            <div class="withdrawal-section">
+                <h3>Withdraw Your LTC</h3>
+                <div class="form-group">
+                    <label for="ltc-wallet">LTC Wallet Address:</label>
+                    <input type="text" id="ltc-wallet" placeholder="Enter your Litecoin wallet address">
+                    <div class="error-msg" id="wallet-error">Please enter a valid LTC wallet address</div>
+                </div>
+                <button id="withdraw-btn" class="btn" onclick="processWithdrawal()" disabled>Withdraw All LTC</button>
+                <div class="withdrawal-status" id="withdrawal-msg">
+                    <p>Withdrawal successful!</p>
+                    <p>Sent to wallet: <span id="target-wallet" class="ltc-display">-</span></p>
+                    <p>Amount sent: <span id="sent-amount" class="ltc-display">-</span> LTC</p>
                 </div>
             </div>
         </div>
@@ -132,16 +182,17 @@
             <h2>Important Rules</h2>
             <ul>
                 <li>Ad will open in a new tab - do not close it before the timer ends</li>
-                <li>You must stay on the ad page for the full required time</li>
                 <li>Rewards are random between 0.00000700 and 0.00000800 LTC per ad</li>
-                <li>Total LTC is cumulative and updates after each claim</li>
+                <li>Balance is cumulative until withdrawn</li>
+                <li>Withdrawal resets balance to 0.00000000 LTC</li>
+                <li>Ensure your wallet address is correct - withdrawals cannot be reversed</li>
                 <li>All activities must comply with laws and ad provider policies</li>
             </ul>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Watch Ads - Earn LTC - All rights reserved. Contact us for more information.</p>
+        <p>&copy; 2026 Watch Ads - Earn & Withdraw LTC - All rights reserved. Contact us for more information.</p>
     </footer>
 
     <script>
@@ -149,17 +200,25 @@
         let adTimer;
         let timeRemaining = 30;
         const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
-        // Reward range: min 0.00000700, max 0.00000800 LTC
         const MIN_REWARD = 0.00000700;
         const MAX_REWARD = 0.00000800;
+        const LTC_WALLET_MIN_LENGTH = 26; // Basic validation for LTC addresses
 
-        // Format number to 8 decimal places (standard for LTC)
         function formatLtc(value) {
             return value.toFixed(8);
         }
 
         function updateTotalDisplay() {
-            document.getElementById('total-ltc').textContent = formatLtc(totalLtc);
+            const balance = formatLtc(totalLtc);
+            document.getElementById('total-ltc').textContent = balance;
+            // Enable/disable withdraw button based on balance
+            document.getElementById('withdraw-btn').disabled = (totalLtc <= 0);
+        }
+
+        function validateWalletAddress(address) {
+            // Basic validation (LTC addresses start with L, M, or 3, and have correct length)
+            const validPrefixes = ['L', 'M', '3'];
+            return address && validPrefixes.includes(address[0]) && address.length >= LTC_WALLET_MIN_LENGTH;
         }
 
         function openAdLink() {
@@ -170,6 +229,7 @@
             startBtn.disabled = true;
             timer.style.display = 'block';
             document.getElementById('reward-msg').style.display = 'none';
+            document.getElementById('withdrawal-msg').style.display = 'none';
             
             adTimer = setInterval(() => {
                 timeRemaining--;
@@ -184,27 +244,53 @@
         }
 
         function claimReward() {
-            // Generate random reward within range
             const randomReward = MIN_REWARD + Math.random() * (MAX_REWARD - MIN_REWARD);
-            // Add to total
             totalLtc += randomReward;
             
-            // Update display
             document.getElementById('session-reward').textContent = formatLtc(randomReward);
             document.getElementById('updated-total').textContent = formatLtc(totalLtc);
             updateTotalDisplay();
             
-            // Hide claim button and show reward info
             document.getElementById('claim-btn').style.display = 'none';
             document.getElementById('reward-msg').style.display = 'block';
             
-            // Reset for next ad
             setTimeout(() => {
                 document.getElementById('start-ad-btn').disabled = false;
                 timeRemaining = 30;
                 document.getElementById('time-left').textContent = 30;
             }, 5000);
         }
+
+        function processWithdrawal() {
+            const walletInput = document.getElementById('ltc-wallet');
+            const walletAddress = walletInput.value.trim();
+            const errorMsg = document.getElementById('wallet-error');
+            const withdrawalMsg = document.getElementById('withdrawal-msg');
+
+            // Validate wallet address
+            if (!validateWalletAddress(walletAddress)) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            // Display withdrawal details
+            document.getElementById('target-wallet').textContent = walletAddress;
+            document.getElementById('sent-amount').textContent = formatLtc(totalLtc);
+            withdrawalMsg.style.display = 'block';
+
+            // Reset balance to 0
+            totalLtc = 0;
+            updateTotalDisplay();
+
+            // Clear wallet input after delay
+            setTimeout(() => {
+                walletInput.value = '';
+            }, 5000);
+        }
+
+        // Update display on page load
+        updateTotalDisplay();
     </script>
 </body>
 </html>
