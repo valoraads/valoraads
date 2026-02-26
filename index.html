@@ -3,224 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Ads - Earn & Withdraw LTC</title>
+    <title>Earn LTC - Watch Ads, Get Paid</title>
+    <!-- Google Fonts - Inter (Modern Sans-Serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
+
+        :root {
+            --primary: #0066CC; /* LTC Brand Blue */
+            --secondary: #36B37E; /* Success Green */
+            --dark: #1A1A1A;
+            --light: #F5F7FA;
+            --gray: #6B7280;
+            --border: #E2E8F0;
+        }
+
         body {
-            background-color: #f0f2f5;
-            color: #333;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
-        header {
-            background-color: #2563eb;
-            color: white;
-            padding: 1rem;
-            text-align: center;
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
         }
+
+        /* Container */
         .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .ad-section {
-            border: 2px dashed #2563eb;
-            border-radius: 8px;
-            padding: 2rem;
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+        }
+
+        .balance-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
             text-align: center;
-            margin: 1rem 0;
+            background: linear-gradient(135deg, var(--primary) 0%, #004494 100%);
+            color: white;
+            margin-bottom: 3rem;
         }
-        .ad-info {
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            background-color: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Card Components */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--dark);
+        }
+
+        .card-title i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        /* Ad Section */
+        .ad-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--gray);
+        }
+
+        .ad-info .reward-range {
+            color: var(--primary);
+            font-weight: 600;
             font-size: 1.1rem;
         }
-        .btn-container {
-            margin: 1rem 0;
-            display: inline-block;
-            text-align: left;
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
         }
-        .btn {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            width: 200px;
-            margin: 0.5rem 0;
-        }
-        .btn:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
-        .timer {
-            margin: 1rem 0;
+
+        .action-btn {
+            width: 100%;
+            max-width: 300px;
             padding: 1rem;
-            background-color: #f8fafc;
-            border-radius: 4px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #004494;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #258B64;
+            transform: translateY(-2px);
+        }
+
+        .timer-box {
+            background-color: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--dark);
+            font-weight: 500;
             display: none;
         }
-        .reward-info, .withdrawal-status {
-            color: #16a34a;
-            font-weight: bold;
+
+        .reward-alert {
+            background-color: rgba(54, 179, 126, 0.1);
+            color: var(--secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
             margin-top: 1rem;
             display: none;
         }
-        .ltc-display {
-            font-family: 'Courier New', monospace;
-            color: #0066cc;
-        }
-        /* Withdrawal section styles */
-        .withdrawal-section {
-            border: 2px dashed #16a34a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .withdrawal-section h3 {
-            margin-bottom: 1rem;
-            color: #16a34a;
-        }
+
+        /* Withdrawal Section */
         .form-group {
-            margin: 1rem 0;
-            text-align: left;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 1.5rem;
         }
-        label {
+
+        .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: bold;
+            font-weight: 500;
+            color: var(--dark);
         }
-        input {
+
+        .form-input {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--light);
+            transition: border-color 0.3s ease;
         }
-        .error-msg {
-            color: #dc2626;
-            font-size: 0.9rem;
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: white;
+        }
+
+        .error-text {
+            color: #E53E3E;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
             display: none;
         }
-        footer {
-            text-align: center;
+
+        .withdrawal-alert {
+            background-color: rgba(0, 102, 204, 0.1);
+            color: var(--primary);
             padding: 1rem;
-            color: #64748b;
-            font-size: 0.9rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .card-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .btn-group {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .action-btn {
+                max-width: 250px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero {
+                padding: 6rem 0;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <h1>Watch Ads & Earn Litecoin (LTC)</h1>
-        <p>Visit ad links to earn rewards & withdraw to your wallet</p>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fab fa-litecoin"></i>
+                <span>EarnLTC</span>
+            </div>
+            <div class="balance-badge">
+                <i class="fab fa-litecoin"></i>
+                <span id="total-ltc">0.00000000</span> LTC
+            </div>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="card">
-            <h2>Your Account Information</h2>
-            <p>Username: <span id="username">New User</span></p>
-            <p>Available LTC Balance: <span id="total-ltc" class="ltc-display">0.00000000</span> LTC</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Turn Ad Views Into Litecoin</h1>
+            <p>Watch ads in your free time and earn real Litecoin (LTC) – no hidden fees, no minimum balance to withdraw.</p>
+            <button class="cta-btn" onclick="scrollToAdSection()">
+                <i class="fas fa-play-circle"></i>
+                Start Earning Now
+            </button>
         </div>
+    </section>
 
-        <div class="card">
-            <h2>Watch Ads Now</h2>
-            <div class="ad-section">
+    <!-- Main Content -->
+    <main class="container">
+        <div class="card-grid">
+            <!-- Earn LTC Card -->
+            <div class="card" id="ad-section-card">
+                <h2 class="card-title">
+                    <i class="fas fa-tv"></i>
+                    Watch Ads & Earn
+                </h2>
                 <div class="ad-info">
-                    <p>Click the button below to open the ad link in a new tab.</p>
-                    <p>Please stay on the ad page for at least <strong>30 seconds</strong> to earn rewards.</p>
-                    <p>Reward per ad: <strong>0.00000700 - 0.00000800 LTC</strong></p>
+                    <p>Open the ad link and stay on page for <strong>30 seconds</strong> to get rewarded.</p>
+                    <p class="reward-range">Reward per ad: 0.00000700 – 0.00000800 LTC</p>
                 </div>
-                
-                <div class="btn-container">
-                    <button id="start-ad-btn" class="btn" onclick="openAdLink()">Start Watching Ad</button>
-                    <button id="claim-btn" class="btn" style="display: none;" onclick="claimReward()">Claim LTC Reward</button>
+                <div class="timer-box" id="timer">
+                    <i class="fas fa-clock"></i>
+                    Time remaining: <span id="time-left">30</span> seconds
                 </div>
-                
-                <div class="timer" id="timer">
-                    Required viewing time remaining: <span id="time-left">30</span> seconds
+                <div class="btn-group">
+                    <button id="start-ad-btn" class="action-btn btn-primary" onclick="openAdLink()">
+                        <i class="fas fa-external-link-alt"></i>
+                        Open Ad Link
+                    </button>
+                    <button id="claim-btn" class="action-btn btn-success" style="display: none;" onclick="claimReward()">
+                        <i class="fas fa-gift"></i>
+                        Claim LTC Reward
+                    </button>
                 </div>
-                
-                <div class="reward-info" id="reward-msg">
-                    <p>Earned this session: <span id="session-reward" class="ltc-display">0.00000000</span> LTC</p>
-                    <p>Updated balance: <span id="updated-total" class="ltc-display">0.00000000</span> LTC</p>
+                <div class="reward-alert" id="reward-msg">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Earned this session: <span id="session-reward">0.00000000</span> LTC</p>
+                    <p>Updated balance: <span id="updated-total">0.00000000</span> LTC</p>
                 </div>
             </div>
 
-            <!-- Withdrawal Section -->
-            <div class="withdrawal-section">
-                <h3>Withdraw Your LTC</h3>
-                <div class="form-group">
-                    <label for="ltc-wallet">LTC Wallet Address:</label>
-                    <input type="text" id="ltc-wallet" placeholder="Enter your Litecoin wallet address">
-                    <div class="error-msg" id="wallet-error">Please enter a valid LTC wallet address</div>
-                </div>
-                <button id="withdraw-btn" class="btn" onclick="processWithdrawal()" disabled>Withdraw All LTC</button>
-                <div class="withdrawal-status" id="withdrawal-msg">
+            <!-- Withdraw LTC Card -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-wallet"></i>
+                    Withdraw Your LTC
+                </h2>
+                <form id="withdrawal-form">
+                    <div class="form-group">
+                        <label for="ltc-wallet" class="form-label">Litecoin Wallet Address</label>
+                        <input 
+                            type="text" 
+                            id="ltc-wallet" 
+                            class="form-input" 
+                            placeholder="Enter your LTC wallet address (starts with L/M/3)"
+                        >
+                        <div class="error-text" id="wallet-error">Please enter a valid LTC wallet address</div>
+                    </div>
+                    <button id="withdraw-btn" class="action-btn btn-primary" onclick="processWithdrawal()" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                        Withdraw All LTC
+                    </button>
+                </form>
+                <div class="withdrawal-alert" id="withdrawal-msg">
+                    <i class="fas fa-check-circle"></i>
                     <p>Withdrawal successful!</p>
-                    <p>Sent to wallet: <span id="target-wallet" class="ltc-display">-</span></p>
-                    <p>Amount sent: <span id="sent-amount" class="ltc-display">-</span> LTC</p>
+                    <p>Sent to: <span id="target-wallet">-</span></p>
+                    <p>Amount sent: <span id="sent-amount">-</span> LTC</p>
                 </div>
             </div>
         </div>
 
+        <!-- Rules Card -->
         <div class="card">
-            <h2>Important Rules</h2>
-            <ul>
-                <li>Ad will open in a new tab - do not close it before the timer ends</li>
-                <li>Rewards are random between 0.00000700 and 0.00000800 LTC per ad</li>
-                <li>Balance is cumulative until withdrawn</li>
-                <li>Withdrawal resets balance to 0.00000000 LTC</li>
-                <li>Ensure your wallet address is correct - withdrawals cannot be reversed</li>
-                <li>All activities must comply with laws and ad provider policies</li>
-            </ul>
+            <h2 class="card-title">
+                <i class="fas fa-info-circle"></i>
+                How It Works
+            </h2>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 600;">Earn Fairly</h3>
+                        <p style="color: var(--gray); font-size: 0.9rem;">Watch ads fully to get random rewards between 0.00000700 – 0.00000800 LTC.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 600;">Withdraw Anytime</h3>
+                        <p style="color: var(--gray); font-size: 0.9rem;">No minimum balance – withdraw all your earnings to your LTC wallet.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 600;">Stay Compliant</h3>
+                        <p style="color: var(--gray); font-size: 0.9rem;">Only use legitimate ad links – no bots or shortcuts allowed.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 600;">Secure Transactions</h3>
+                        <p style="color: var(--gray); font-size: 0.9rem;">Double-check your wallet address – withdrawals cannot be reversed.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <footer>
-        <p>&copy; 2026 Watch Ads - Earn & Withdraw LTC - All rights reserved. Contact us for more information.</p>
+    <!-- Footer -->
+        <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#terms">Terms of Service</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#support">Contact Support</a>
+            </div>
+            <p>&copy; 2026 EarnLTC. All Rights Reserved.</p>
+            <p style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">Litecoin is a registered trademark of the Litecoin Foundation.</p>
+        </div>
     </footer>
 
+    <!-- JavaScript Functionality -->
     <script>
         let totalLtc = 0;
         let adTimer;
         let timeRemaining = 30;
+        // Ganti dengan link iklan sebenarnya
         const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
         const MIN_REWARD = 0.00000700;
         const MAX_REWARD = 0.00000800;
-        const LTC_WALLET_MIN_LENGTH = 26; // Basic validation for LTC addresses
+        const LTC_WALLET_MIN_LENGTH = 26;
 
+        // Format angka ke 8 angka di belakang koma (standar LTC)
         function formatLtc(value) {
             return value.toFixed(8);
         }
 
+        // Update tampilan saldo
         function updateTotalDisplay() {
             const balance = formatLtc(totalLtc);
             document.getElementById('total-ltc').textContent = balance;
-            // Enable/disable withdraw button based on balance
             document.getElementById('withdraw-btn').disabled = (totalLtc <= 0);
         }
 
+        // Validasi alamat wallet LTC
         function validateWalletAddress(address) {
-            // Basic validation (LTC addresses start with L, M, or 3, and have correct length)
             const validPrefixes = ['L', 'M', '3'];
             return address && validPrefixes.includes(address[0]) && address.length >= LTC_WALLET_MIN_LENGTH;
         }
 
+        // Gulir ke bagian iklan saat tombol CTA diklik
+        function scrollToAdSection() {
+            document.getElementById('ad-section-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Buka link iklan di tab baru
         function openAdLink() {
             const startBtn = document.getElementById('start-ad-btn');
             const timer = document.getElementById('timer');
@@ -231,6 +525,7 @@
             document.getElementById('reward-msg').style.display = 'none';
             document.getElementById('withdrawal-msg').style.display = 'none';
             
+            // Mulai hitung mundur
             adTimer = setInterval(() => {
                 timeRemaining--;
                 document.getElementById('time-left').textContent = timeRemaining;
@@ -243,6 +538,7 @@
             }, 1000);
         }
 
+        // Klaim reward LTC
         function claimReward() {
             const randomReward = MIN_REWARD + Math.random() * (MAX_REWARD - MIN_REWARD);
             totalLtc += randomReward;
@@ -254,6 +550,7 @@
             document.getElementById('claim-btn').style.display = 'none';
             document.getElementById('reward-msg').style.display = 'block';
             
+            // Reset untuk iklan selanjutnya
             setTimeout(() => {
                 document.getElementById('start-ad-btn').disabled = false;
                 timeRemaining = 30;
@@ -261,36 +558,39 @@
             }, 5000);
         }
 
+        // Proses penarikan
         function processWithdrawal() {
+            event.preventDefault(); // Mencegah reload halaman
             const walletInput = document.getElementById('ltc-wallet');
             const walletAddress = walletInput.value.trim();
             const errorMsg = document.getElementById('wallet-error');
             const withdrawalMsg = document.getElementById('withdrawal-msg');
 
-            // Validate wallet address
+            // Validasi alamat wallet
             if (!validateWalletAddress(walletAddress)) {
                 errorMsg.style.display = 'block';
                 return;
             }
             errorMsg.style.display = 'none';
 
-            // Display withdrawal details
+            // Tampilkan pesan sukses
             document.getElementById('target-wallet').textContent = walletAddress;
             document.getElementById('sent-amount').textContent = formatLtc(totalLtc);
             withdrawalMsg.style.display = 'block';
 
-            // Reset balance to 0
+            // Reset saldo menjadi 0
             totalLtc = 0;
             updateTotalDisplay();
 
-            // Clear wallet input after delay
+            // Kosongkan input wallet setelah beberapa detik
             setTimeout(() => {
                 walletInput.value = '';
-            }, 5000);
+                withdrawalMsg.style.display = 'none';
+            }, 7000);
         }
 
-        // Update display on page load
-        updateTotalDisplay();
+        // Update tampilan saat halaman dimuat
+        window.onload = updateTotalDisplay;
     </script>
 </body>
 </html>
