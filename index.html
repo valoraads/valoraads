@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Ads - Earn Rewards</title>
+    <title>Watch Ads - Earn LTC</title>
     <style>
         * {
             margin: 0;
@@ -44,10 +44,8 @@
             margin-bottom: 1.5rem;
             font-size: 1.1rem;
         }
-        /* Button container to align both buttons consistently */
         .btn-container {
             margin: 1rem 0;
-            /* Ensures buttons take the same width and align vertically */
             display: inline-block;
             text-align: left;
         }
@@ -59,7 +57,6 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
-            /* Fixed width for alignment */
             width: 200px;
             margin: 0.5rem 0;
         }
@@ -80,6 +77,11 @@
             margin-top: 1rem;
             display: none;
         }
+        /* Style for LTC display */
+        .ltc-display {
+            font-family: 'Courier New', monospace;
+            color: #0066cc;
+        }
         footer {
             text-align: center;
             padding: 1rem;
@@ -90,15 +92,15 @@
 </head>
 <body>
     <header>
-        <h1>Watch Ads & Earn Rewards</h1>
-        <p>Visit ad links to get points or rewards</p>
+        <h1>Watch Ads & Earn Litecoin (LTC)</h1>
+        <p>Visit ad links to get random LTC rewards</p>
     </header>
 
     <div class="container">
         <div class="card">
             <h2>Your Account Information</h2>
             <p>Username: <span id="username">New User</span></p>
-            <p>Current Points: <span id="points">0</span> pts</p>
+            <p>Total LTC Earned: <span id="total-ltc" class="ltc-display">0.00000000</span> LTC</p>
         </div>
 
         <div class="card">
@@ -106,20 +108,23 @@
             <div class="ad-section">
                 <div class="ad-info">
                     <p>Click the button below to open the ad link in a new tab.</p>
-                    <p>Please stay on the ad page for at least <strong>30 seconds</strong> to earn points.</p>
+                    <p>Please stay on the ad page for at least <strong>30 seconds</strong> to earn rewards.</p>
+                    <p>Reward per ad: <strong>0.00000700 - 0.00000800 LTC</strong></p>
                 </div>
                 
-                <!-- Button container for alignment -->
                 <div class="btn-container">
                     <button id="start-ad-btn" class="btn" onclick="openAdLink()">Start Watching Ad</button>
-                    <button id="claim-btn" class="btn" style="display: none;" onclick="claimReward()">Claim Points</button>
+                    <button id="claim-btn" class="btn" style="display: none;" onclick="claimReward()">Claim LTC Reward</button>
                 </div>
                 
                 <div class="timer" id="timer">
                     Required viewing time remaining: <span id="time-left">30</span> seconds
                 </div>
                 
-                <div class="reward-info" id="reward-msg"></div>
+                <div class="reward-info" id="reward-msg">
+                    <p>Earned this session: <span id="session-reward" class="ltc-display">0.00000000</span> LTC</p>
+                    <p>Updated total: <span id="updated-total" class="ltc-display">0.00000000</span> LTC</p>
+                </div>
             </div>
         </div>
 
@@ -128,39 +133,44 @@
             <ul>
                 <li>Ad will open in a new tab - do not close it before the timer ends</li>
                 <li>You must stay on the ad page for the full required time</li>
-                <li>Points can only be claimed after the timer completes</li>
+                <li>Rewards are random between 0.00000700 and 0.00000800 LTC per ad</li>
+                <li>Total LTC is cumulative and updates after each claim</li>
                 <li>All activities must comply with laws and ad provider policies</li>
             </ul>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Watch Ads - All rights reserved. Contact us for more information.</p>
+        <p>&copy; 2026 Watch Ads - Earn LTC - All rights reserved. Contact us for more information.</p>
     </footer>
 
     <script>
-        let userPoints = 0;
+        let totalLtc = 0;
         let adTimer;
         let timeRemaining = 30;
-        // Replace with your actual ad direct link
         const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
+        // Reward range: min 0.00000700, max 0.00000800 LTC
+        const MIN_REWARD = 0.00000700;
+        const MAX_REWARD = 0.00000800;
 
-        function updatePointsDisplay() {
-            document.getElementById('points').textContent = userPoints;
+        // Format number to 8 decimal places (standard for LTC)
+        function formatLtc(value) {
+            return value.toFixed(8);
+        }
+
+        function updateTotalDisplay() {
+            document.getElementById('total-ltc').textContent = formatLtc(totalLtc);
         }
 
         function openAdLink() {
             const startBtn = document.getElementById('start-ad-btn');
             const timer = document.getElementById('timer');
             
-            // Open ad link in new tab
             window.open(AD_DIRECT_LINK, '_blank');
-            
-            // Disable start button and show timer
             startBtn.disabled = true;
             timer.style.display = 'block';
+            document.getElementById('reward-msg').style.display = 'none';
             
-            // Start countdown
             adTimer = setInterval(() => {
                 timeRemaining--;
                 document.getElementById('time-left').textContent = timeRemaining;
@@ -174,19 +184,26 @@
         }
 
         function claimReward() {
-            userPoints += 10; // Add 10 points per ad
-            updatePointsDisplay();
+            // Generate random reward within range
+            const randomReward = MIN_REWARD + Math.random() * (MAX_REWARD - MIN_REWARD);
+            // Add to total
+            totalLtc += randomReward;
+            
+            // Update display
+            document.getElementById('session-reward').textContent = formatLtc(randomReward);
+            document.getElementById('updated-total').textContent = formatLtc(totalLtc);
+            updateTotalDisplay();
+            
+            // Hide claim button and show reward info
             document.getElementById('claim-btn').style.display = 'none';
             document.getElementById('reward-msg').style.display = 'block';
-            document.getElementById('reward-msg').textContent = 'Congratulations! You earned 10 points.';
             
             // Reset for next ad
             setTimeout(() => {
                 document.getElementById('start-ad-btn').disabled = false;
-                document.getElementById('reward-msg').style.display = 'none';
                 timeRemaining = 30;
                 document.getElementById('time-left').textContent = 30;
-            }, 3000);
+            }, 5000);
         }
     </script>
 </body>
