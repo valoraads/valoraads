@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earn LTC - Watch Ads, Get Paid</title>
-    <!-- Google Fonts - Inter (Modern Sans-Serif) -->
+    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,8 +17,8 @@
         }
 
         :root {
-            --primary: #0066CC; /* LTC Brand Blue */
-            --secondary: #36B37E; /* Success Green */
+            --primary: #0066CC;
+            --secondary: #36B37E;
             --dark: #1A1A1A;
             --light: #F5F7FA;
             --gray: #6B7280;
@@ -31,32 +31,32 @@
             line-height: 1.6;
         }
 
-        /* Smooth Scrolling */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
 
-        /* Header */
-        header {
+        /* Navigation Bar */
+        nav {
             background-color: white;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .header-content {
+        .nav-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            gap: 1rem;
         }
 
         .logo {
@@ -72,6 +72,26 @@
             font-size: 1.75rem;
         }
 
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
         .balance-badge {
             background-color: var(--primary);
             color: white;
@@ -81,6 +101,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            margin-left: auto;
         }
 
         /* Hero Section */
@@ -152,7 +173,16 @@
             font-size: 1.25rem;
         }
 
-        /* Ad Section */
+        /* Section Visibility */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Home Section Styles */
         .ad-info {
             text-align: center;
             margin-bottom: 2rem;
@@ -236,7 +266,10 @@
             display: none;
         }
 
-        /* Withdrawal Section */
+        .withdrawal-section {
+            margin-top: 2rem;
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -281,6 +314,33 @@
             display: none;
         }
 
+        /* Terms, Privacy, Contact Section Styles */
+        .section-content {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .section-content h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-form .form-input {
+            margin-bottom: 1rem;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark);
@@ -290,21 +350,9 @@
             margin-top: 3rem;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
+        .footer-text {
+            font-size: 0.875rem;
+            opacity: 0.8;
         }
 
         /* Responsive Design */
@@ -329,27 +377,42 @@
             }
         }
 
-        @media (min-width: 1024px) {
-            .hero {
-                padding: 6rem 0;
+        @media (max-width: 767px) {
+            .nav-menu {
+                width: 100%;
+                gap: 1rem;
+            }
+
+            .balance-badge {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container nav-content">
             <div class="logo">
                 <i class="fab fa-litecoin"></i>
                 <span>EarnLTC</span>
             </div>
+
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active" onclick="showSection('home')">Home</a>
+                <a href="#terms" class="nav-link" onclick="showSection('terms')">Terms of Service</a>
+                <a href="#privacy" class="nav-link" onclick="showSection('privacy')">Privacy Policy</a>
+                <a href="#contact" class="nav-link" onclick="showSection('contact')">Contact Support</a>
+            </div>
+
             <div class="balance-badge">
                 <i class="fab fa-litecoin"></i>
                 <span id="total-ltc">0.00000000</span> LTC
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -363,82 +426,84 @@
         </div>
     </section>
 
-    <!-- Main Content -->
+    <!-- Main Content Sections -->
     <main class="container">
-        <div class="card-grid">
-            <!-- Earn LTC Card -->
-            <div class="card" id="ad-section-card">
-                <h2 class="card-title">
-                    <i class="fas fa-tv"></i>
-                    Watch Ads & Earn
-                </h2>
-                <div class="ad-info">
-                    <p>Open the ad link and stay on page for <strong>30 seconds</strong> to get rewarded.</p>
-                    <p class="reward-range">Reward per ad: 0.00000700 – 0.00000800 LTC</p>
+        <!-- Home Section (Active by Default) -->
+        <section id="home" class="content-section active">
+            <div class="card-grid">
+                <!-- Earn LTC Card -->
+                <div class="card" id="ad-section-card">
+                    <h2 class="card-title">
+                        <i class="fas fa-tv"></i>
+                        Watch Ads & Earn
+                    </h2>
+                    <div class="ad-info">
+                        <p>Open the ad link and stay on page for <strong>30 seconds</strong> to get rewarded.</p>
+                        <p class="reward-range">Reward per ad: 0.00000700 – 0.00000800 LTC</p>
+                    </div>
+                    <div class="timer-box" id="timer">
+                        <i class="fas fa-clock"></i>
+                        Time remaining: <span id="time-left">30</span> seconds
+                    </div>
+                    <div class="btn-group">
+                        <button id="start-ad-btn" class="action-btn btn-primary" onclick="openAdLink()">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open Ad Link
+                        </button>
+                        <button id="claim-btn" class="action-btn btn-success" style="display: none;" onclick="claimReward()">
+                            <i class="fas fa-gift"></i>
+                            Claim LTC Reward
+                        </button>
+                    </div>
+                    <div class="reward-alert" id="reward-msg">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Earned this session: <span id="session-reward">0.00000000</span> LTC</p>
+                        <p>Updated balance: <span id="updated-total">0.00000000</span> LTC</p>
+                    </div>
                 </div>
-                <div class="timer-box" id="timer">
-                    <i class="fas fa-clock"></i>
-                    Time remaining: <span id="time-left">30</span> seconds
-                </div>
-                <div class="btn-group">
-                    <button id="start-ad-btn" class="action-btn btn-primary" onclick="openAdLink()">
-                        <i class="fas fa-external-link-alt"></i>
-                        Open Ad Link
-                    </button>
-                    <button id="claim-btn" class="action-btn btn-success" style="display: none;" onclick="claimReward()">
-                        <i class="fas fa-gift"></i>
-                        Claim LTC Reward
-                    </button>
-                </div>
-                <div class="reward-alert" id="reward-msg">
-                    <i class="fas fa-check-circle"></i>
-                    <p>Earned this session: <span id="session-reward">0.00000000</span> LTC</p>
-                    <p>Updated balance: <span id="updated-total">0.00000000</span> LTC</p>
+
+                <!-- Withdraw LTC Card -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-wallet"></i>
+                        Withdraw Your LTC
+                    </h2>
+                    <form id="withdrawal-form" onsubmit="processWithdrawal(); return false;">
+                        <div class="form-group">
+                            <label for="ltc-wallet" class="form-label">Litecoin Wallet Address</label>
+                            <input 
+                                type="text" 
+                                id="ltc-wallet" 
+                                class="form-input" 
+                                placeholder="Enter your LTC wallet address (starts with L/M/3)"
+                            >
+                            <div class="error-text" id="wallet-error">Please enter a valid LTC wallet address</div>
+                        </div>
+                        <button id="withdraw-btn" class="action-btn btn-primary" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                            Withdraw All LTC
+                        </button>
+                    </form>
+                    <div class="withdrawal-alert" id="withdrawal-msg">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Withdrawal successful!</p>
+                        <p>Sent to: <span id="target-wallet">-</span></p>
+                        <p>Amount sent: <span id="sent-amount">-</span> LTC</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Withdraw LTC Card -->
+            <!-- How It Works Card -->
             <div class="card">
                 <h2 class="card-title">
-                    <i class="fas fa-wallet"></i>
-                    Withdraw Your LTC
+                    <i class="fas fa-info-circle"></i>
+                    How It Works
                 </h2>
-                <form id="withdrawal-form">
-                    <div class="form-group">
-                        <label for="ltc-wallet" class="form-label">Litecoin Wallet Address</label>
-                        <input 
-                            type="text" 
-                            id="ltc-wallet" 
-                            class="form-input" 
-                            placeholder="Enter your LTC wallet address (starts with L/M/3)"
-                        >
-                        <div class="error-text" id="wallet-error">Please enter a valid LTC wallet address</div>
-                    </div>
-                    <button id="withdraw-btn" class="action-btn btn-primary" onclick="processWithdrawal()" disabled>
-                        <i class="fas fa-paper-plane"></i>
-                        Withdraw All LTC
-                    </button>
-                </form>
-                <div class="withdrawal-alert" id="withdrawal-msg">
-                    <i class="fas fa-check-circle"></i>
-                    <p>Withdrawal successful!</p>
-                    <p>Sent to: <span id="target-wallet">-</span></p>
-                    <p>Amount sent: <span id="sent-amount">-</span> LTC</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Rules Card -->
-        <div class="card">
-            <h2 class="card-title">
-                <i class="fas fa-info-circle"></i>
-                How It Works
-            </h2>
-            <div style="display: grid; gap: 1rem;">
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
-                    <div>
-                        <h3 style="font-size: 1rem; font-weight: 600;">Earn Fairly</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                        <div>
+                            <h3 style="font-size: 1rem; font-weight: 600;font-weight: 600;">Earn Fairly</h3>
                         <p style="color: var(--gray); font-size: 0.9rem;">Watch ads fully to get random rewards between 0.00000700 – 0.00000800 LTC.</p>
                     </div>
                 </div>
@@ -465,132 +530,262 @@
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- Footer -->
-        <footer>
-        <div class="container">
-            <div class="footer-links">
-                <a href="#terms">Terms of Service</a>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#support">Contact Support</a>
-            </div>
-            <p>&copy; 2026 EarnLTC. All Rights Reserved.</p>
-            <p style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">Litecoin is a registered trademark of the Litecoin Foundation.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript Functionality -->
-    <script>
-        let totalLtc = 0;
-        let adTimer;
-        let timeRemaining = 30;
-        // Ganti dengan link iklan sebenarnya
-        const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
-        const MIN_REWARD = 0.00000700;
-        const MAX_REWARD = 0.00000800;
-        const LTC_WALLET_MIN_LENGTH = 26;
-
-        // Format angka ke 8 angka di belakang koma (standar LTC)
-        function formatLtc(value) {
-            return value.toFixed(8);
-        }
-
-        // Update tampilan saldo
-        function updateTotalDisplay() {
-            const balance = formatLtc(totalLtc);
-            document.getElementById('total-ltc').textContent = balance;
-            document.getElementById('withdraw-btn').disabled = (totalLtc <= 0);
-        }
-
-        // Validasi alamat wallet LTC
-        function validateWalletAddress(address) {
-            const validPrefixes = ['L', 'M', '3'];
-            return address && validPrefixes.includes(address[0]) && address.length >= LTC_WALLET_MIN_LENGTH;
-        }
-
-        // Gulir ke bagian iklan saat tombol CTA diklik
-        function scrollToAdSection() {
-            document.getElementById('ad-section-card').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Buka link iklan di tab baru
-        function openAdLink() {
-            const startBtn = document.getElementById('start-ad-btn');
-            const timer = document.getElementById('timer');
-            
-            window.open(AD_DIRECT_LINK, '_blank');
-            startBtn.disabled = true;
-            timer.style.display = 'block';
-            document.getElementById('reward-msg').style.display = 'none';
-            document.getElementById('withdrawal-msg').style.display = 'none';
-            
-            // Mulai hitung mundur
-            adTimer = setInterval(() => {
-                timeRemaining--;
-                document.getElementById('time-left').textContent = timeRemaining;
+    <!-- Terms of Service Section -->
+    <section id="terms" class="content-section">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-file-contract"></i>
+                Terms of Service
+            </h2>
+            <div class="section-content">
+                <p>Last updated: February 26, 2026</p>
                 
-                if (timeRemaining <= 0) {
-                    clearInterval(adTimer);
-                    timer.style.display = 'none';
-                    document.getElementById('claim-btn').style.display = 'block';
-                }
-            }, 1000);
-        }
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing or using the EarnLTC platform, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you must not use our service.</p>
+                
+                <h3>2. Eligibility</h3>
+                <p>You must be at least 18 years old and have the legal capacity to enter into these terms to use our service. We reserve the right to refuse service to anyone at any time for any reason.</p>
+                
+                <h3>3. User Responsibilities</h3>
+                <ul>
+                    <li>You agree not to use bots, scripts, or automated tools to access or use the platform.</li>
+                    <li>You must not share false or misleading information when registering or withdrawing rewards.</li>
+                    <li>You are responsible for maintaining the security of your account and wallet address.</li>
+                </ul>
+                
+                <h3>4. Reward and Withdrawal Rules</h3>
+                <ul>
+                    <li>Rewards are granted only after completing ad viewing requirements (30 seconds minimum).</li>
+                    <li>Withdrawals are processed manually or automatically (depending on volume) within 1-3 business days.</li>
+                    <li>We are not responsible for lost funds due to incorrect wallet addresses.</li>
+                </ul>
+                
+                <h3>5. Termination</h3>
+                <p>We may terminate or suspend your access to the platform immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms of Service.</p>
+            </div>
+        </div>
+    </section>
 
-        // Klaim reward LTC
-        function claimReward() {
-            const randomReward = MIN_REWARD + Math.random() * (MAX_REWARD - MIN_REWARD);
-            totalLtc += randomReward;
-            
-            document.getElementById('session-reward').textContent = formatLtc(randomReward);
-            document.getElementById('updated-total').textContent = formatLtc(totalLtc);
-            updateTotalDisplay();
-            
-            document.getElementById('claim-btn').style.display = 'none';
-            document.getElementById('reward-msg').style.display = 'block';
-            
-            // Reset untuk iklan selanjutnya
-            setTimeout(() => {
-                document.getElementById('start-ad-btn').disabled = false;
-                timeRemaining = 30;
-                document.getElementById('time-left').textContent = 30;
-            }, 5000);
-        }
+    <!-- Privacy Policy Section -->
+    <section id="privacy" class="content-section">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-shield-alt"></i>
+                Privacy Policy
+            </h2>
+            <div class="section-content">
+                <p>Last updated: February 26, 2026</p>
+                
+                <h3>1. Information We Collect</h3>
+                <ul>
+                    <li><strong>Personal Information:</strong> We do not collect personal data such as names, emails, or phone numbers – only your Litecoin wallet address for withdrawals.</li>
+                    <li><strong>Usage Data:</strong> We may collect information about how you access and use the platform (e.g., device type, browser version, ad links viewed).</li>
+                </ul>
+                
+                <h3>2. How We Use Your Information</h3>
+                <p>We use collected information only for the following purposes:</p>
+                <ul>
+                    <li>To process and complete withdrawal requests.</li>
+                    <li>To improve the performance and usability of the platform.</li>
+                    <li>To detect and prevent fraudulent activity.</li>
+                </ul>
+                
+                <h3>3. Data Security</h3>
+                <p>We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of your information. However, no method of transmission over the internet or electronic storage is 100% secure.</p>
+                
+                <h3>4. Sharing Your Information</h3>
+                <p>We do not sell, trade, or otherwise transfer your information to third parties except:</p>
+                <ul>
+                    <li>To process withdrawals (your wallet address is shared only with blockchain networks).</li>
+                    <li>When required by law or to protect our rights, property, or safety.</li>
+                </ul>
+                
+                <h3>5. Changes to This Policy</h3>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+            </div>
+        </div>
+    </section>
 
-        // Proses penarikan
-        function processWithdrawal() {
-            event.preventDefault(); // Mencegah reload halaman
-            const walletInput = document.getElementById('ltc-wallet');
-            const walletAddress = walletInput.value.trim();
-            const errorMsg = document.getElementById('wallet-error');
-            const withdrawalMsg = document.getElementById('withdrawal-msg');
+    <!-- Contact Support Section -->
+    <section id="contact" class="content-section">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-headset"></i>
+                Contact Support
+            </h2>
+            <div class="section-content">
+                <p>Have questions or issues? Fill out the form below and we'll respond within 24-48 business hours.</p>
+                
+                <form class="contact-form" onsubmit="submitContactForm(); return false;">
+                    <div class="form-group">
+                        <label for="contact-subject" class="form-label">Subject</label>
+                        <input type="text" id="contact-subject" class="form-input" placeholder="e.g., Withdrawal Issue, Reward Not Received" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-details" class="form-label">Details (Include Wallet Address if Applicable)</label>
+                        <textarea id="contact-details" class="form-input" placeholder="Describe your issue in detail..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="action-btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+                
+                <div class="reward-alert" id="contact-success" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Your message has been sent successfully! We'll get back to you soon.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
-            // Validasi alamat wallet
-            if (!validateWalletAddress(walletAddress)) {
-                errorMsg.style.display = 'block';
-                return;
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p>&copy; 2026 EarnLTC. All Rights Reserved.</p>
+        <p class="footer-text">Litecoin is a registered trademark of the Litecoin Foundation.</p>
+    </div>
+</footer>
+
+<!-- JavaScript Functionality -->
+<script>
+    let totalLtc = 0;
+    let adTimer;
+    let timeRemaining = 30;
+    const AD_DIRECT_LINK = "https://example.com/your-ad-link-here";
+    const MIN_REWARD = 0.00000700;
+    const MAX_REWARD = 0.00000800;
+    const LTC_WALLET_MIN_LENGTH = 26;
+
+    // Show Only Selected Section
+    function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => section.classList.remove('active'));
+        
+        // Remove active class from all nav links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => link.classList.remove('active'));
+        
+        // Show selected section and activate nav link
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+    }
+
+    // Format LTC to 8 Decimal Places
+    function formatLtc(value) {
+        return value.toFixed(8);
+    }
+
+    // Update Balance Display
+    function updateTotalDisplay() {
+        const balance = formatLtc(totalLtc);
+        document.getElementById('total-ltc').textContent = balance;
+        document.getElementById('withdraw-btn').disabled = (totalLtc <= 0);
+    }
+
+    // Validate LTC Wallet Address
+    function validateWalletAddress(address) {
+        const validPrefixes = ['L', 'M', '3'];
+        return address && validPrefixes.includes(address[0]) && address.length >= LTC_WALLET_MIN_LENGTH;
+    }
+
+    // Scroll to Ad Section
+    function scrollToAdSection() {
+        document.getElementById('ad-section-card').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Open Ad Link
+    function openAdLink() {
+        const startBtn = document.getElementById('start-ad-btn');
+        const timer = document.getElementById('timer');
+        
+        window.open(AD_DIRECT_LINK, '_blank');
+        startBtn.disabled = true;
+        timer.style.display = 'block';
+        document.getElementById('reward-msg').style.display = 'none';
+        document.getElementById('withdrawal-msg').style.display = 'none';
+        
+        adTimer = setInterval(() => {
+            timeRemaining--;
+            document.getElementById('time-left').textContent = timeRemaining;
+            
+            if (timeRemaining <= 0) {
+                clearInterval(adTimer);
+                timer.style.display = 'none';
+                document.getElementById('claim-btn').style.display = 'block';
             }
-            errorMsg.style.display = 'none';
+        }, 1000);
+    }
 
-            // Tampilkan pesan sukses
-            document.getElementById('target-wallet').textContent = walletAddress;
-            document.getElementById('sent-amount').textContent = formatLtc(totalLtc);
-            withdrawalMsg.style.display = 'block';
+    // Claim Reward
+    function claimReward() {
+        const randomReward = MIN_REWARD + Math.random() * (MAX_REWARD - MIN_REWARD);
+        totalLtc += randomReward;
+        
+        document.getElementById('session-reward').textContent = formatLtc(randomReward);
+        document.getElementById('updated-total').textContent = formatLtc(totalLtc);
+        updateTotalDisplay();
+        
+        document.getElementById('claim-btn').style.display = 'none';
+        document.getElementById('reward-msg').style.display = 'block';
+        
+        setTimeout(() => {
+            document.getElementById('start-ad-btn').disabled = false;
+            timeRemaining = 30;
+            document.getElementById('time-left').textContent = 30;
+        }, 5000);
+    }
 
-            // Reset saldo menjadi 0
-            totalLtc = 0;
-            updateTotalDisplay();
+    // Process Withdrawal
+    function processWithdrawal() {
+        const walletInput = document.getElementById('ltc-wallet');
+        const walletAddress = walletInput.value.trim();
+        const errorMsg = document.getElementById('wallet-error');
+        const withdrawalMsg = document.getElementById('withdrawal-msg');
 
-            // Kosongkan input wallet setelah beberapa detik
-            setTimeout(() => {
-                walletInput.value = '';
-                withdrawalMsg.style.display = 'none';
-            }, 7000);
+        if (!validateWalletAddress(walletAddress)) {
+            errorMsg.style.display = 'block';
+            return;
         }
+        errorMsg.style.display = 'none';
 
-        // Update tampilan saat halaman dimuat
-        window.onload = updateTotalDisplay;
-    </script>
+        document.getElementById('target-wallet').textContent = walletAddress;
+        document.getElementById('sent-amount').textContent = formatLtc(totalLtc);
+        withdrawalMsg.style.display = 'block';
+
+        totalLtc = 0;
+        updateTotalDisplay();
+
+        setTimeout(() => {
+            walletInput.value = '';
+            withdrawalMsg.style.display = 'none';
+        }, 7000);
+    }
+
+    // Submit Contact Form
+    function submitContactForm() {
+        const subjectInput = document.getElementById('contact-subject');
+        const detailsInput = document.getElementById('contact-details');
+        const successMsg = document.getElementById('contact-success');
+
+        // Reset form and show success message
+        subjectInput.value = '';
+        detailsInput.value = '';
+        successMsg.style.display = 'block';
+
+        setTimeout(() => {
+            successMsg.style.display = 'none';
+        }, 5000);
+    }
+
+    // Initialize on Page Load
+    window.onload = updateTotalDisplay;
+</script>
 </body>
 </html>
