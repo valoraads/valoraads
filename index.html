@@ -53,7 +53,6 @@
 
         .nav-content {
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
@@ -72,24 +71,65 @@
             font-size: 1.75rem;
         }
 
-        .nav-menu {
+        /* Hamburger Toggle Button */
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            color: var(--primary);
+            cursor: pointer;
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.15);
+            padding: 2rem 1.5rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
         }
 
         .nav-link {
             color: var(--dark);
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem 0;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            transition: color 0.3s ease;
         }
 
         .nav-link.active, .nav-link:hover {
             color: var(--primary);
-            border-bottom: 2px solid var(--primary);
         }
 
         .balance-badge {
@@ -101,7 +141,23 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-left: auto;
+            margin-top: auto;
+        }
+
+        /* Overlay When Menu Open */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 100;
+        }
+
+        .overlay.active {
+            display: block;
         }
 
         /* Hero Section */
@@ -355,8 +411,38 @@
             opacity: 0.8;
         }
 
-        /* Responsive Design */
+        /* Desktop View Adjustment */
         @media (min-width: 768px) {
+            .menu-toggle {
+                display: none;
+            }
+
+            .mobile-menu {
+                position: static;
+                width: auto;
+                height: auto;
+                background: none;
+                box-shadow: none;
+                padding: 0;
+                transform: translateX(0);
+                flex-direction: row;
+                gap: 1.5rem;
+            }
+
+            .menu-header, .close-btn {
+                display: none;
+            }
+
+            .nav-link {
+                border-bottom: none;
+                padding: 0.5rem 0;
+            }
+
+            .balance-badge {
+                margin-top: 0;
+                margin-left: 1.5rem;
+            }
+
             .hero h1 {
                 font-size: 3rem;
             }
@@ -376,22 +462,12 @@
                 max-width: 250px;
             }
         }
-
-        @media (max-width: 767px) {
-            .nav-menu {
-                width: 100%;
-                gap: 1rem;
-            }
-
-            .balance-badge {
-                margin-left: 0;
-                width: 100%;
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- Overlay for Mobile Menu -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
     <!-- Navigation Bar -->
     <nav>
         <div class="container nav-content">
@@ -400,16 +476,29 @@
                 <span>EarnLTC</span>
             </div>
 
-            <div class="nav-menu">
-                <a href="#home" class="nav-link active" onclick="showSection('home')">Home</a>
-                <a href="#terms" class="nav-link" onclick="showSection('terms')">Terms of Service</a>
-                <a href="#privacy" class="nav-link" onclick="showSection('privacy')">Privacy Policy</a>
-                <a href="#contact" class="nav-link" onclick="showSection('contact')">Contact Support</a>
-            </div>
+            <!-- Hamburger Toggle Button -->
+            <button class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
 
-            <div class="balance-badge">
-                <i class="fab fa-litecoin"></i>
-                <span id="total-ltc">0.00000000</span> LTC
+            <!-- Mobile/Desktop Menu -->
+            <div class="mobile-menu" id="mobile-menu">
+                <div class="menu-header">
+                    <h3>Menu</h3>
+                    <button class="close-btn" onclick="toggleMenu()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <a href="#home" class="nav-link active" onclick="showSection('home'); toggleMenu()">Home</a>
+                <a href="#terms" class="nav-link" onclick="showSection('terms'); toggleMenu()">Terms of Service</a>
+                <a href="#privacy" class="nav-link" onclick="showSection('privacy'); toggleMenu()">Privacy Policy</a>
+                <a href="#contact" class="nav-link" onclick="showSection('contact'); toggleMenu()">Contact Support</a>
+
+                <div class="balance-badge">
+                    <i class="fab fa-litecoin"></i>
+                    <span id="total-ltc">0.00000000</span> LTC
+                </div>
             </div>
         </div>
     </nav>
@@ -451,59 +540,59 @@
                             Open Ad Link
                         </button>
                         <button id="claim-btn" class="action-btn btn-success" style="display: none;" onclick="claimReward()">
-                            <i class="fas fa-gift"></i>
-                            Claim LTC Reward
-                        </button>
-                    </div>
-                    <div class="reward-alert" id="reward-msg">
-                        <i class="fas fa-check-circle"></i>
-                        <p>Earned this session: <span id="session-reward">0.00000000</span> LTC</p>
-                        <p>Updated balance: <span id="updated-total">0.00000000</span> LTC</p>
-                    </div>
+                        <i class="fas fa-gift"></i>
+                        Claim LTC Reward
+                    </button>
                 </div>
-
-                <!-- Withdraw LTC Card -->
-                <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-wallet"></i>
-                        Withdraw Your LTC
-                    </h2>
-                    <form id="withdrawal-form" onsubmit="processWithdrawal(); return false;">
-                        <div class="form-group">
-                            <label for="ltc-wallet" class="form-label">Litecoin Wallet Address</label>
-                            <input 
-                                type="text" 
-                                id="ltc-wallet" 
-                                class="form-input" 
-                                placeholder="Enter your LTC wallet address (starts with L/M/3)"
-                            >
-                            <div class="error-text" id="wallet-error">Please enter a valid LTC wallet address</div>
-                        </div>
-                        <button id="withdraw-btn" class="action-btn btn-primary" disabled>
-                            <i class="fas fa-paper-plane"></i>
-                            Withdraw All LTC
-                        </button>
-                    </form>
-                    <div class="withdrawal-alert" id="withdrawal-msg">
-                        <i class="fas fa-check-circle"></i>
-                        <p>Withdrawal successful!</p>
-                        <p>Sent to: <span id="target-wallet">-</span></p>
-                        <p>Amount sent: <span id="sent-amount">-</span> LTC</p>
-                    </div>
+                <div class="reward-alert" id="reward-msg">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Earned this session: <span id="session-reward">0.00000000</span> LTC</p>
+                    <p>Updated balance: <span id="updated-total">0.00000000</span> LTC</p>
                 </div>
             </div>
 
-            <!-- How It Works Card -->
+            <!-- Withdraw LTC Card -->
             <div class="card">
                 <h2 class="card-title">
-                    <i class="fas fa-info-circle"></i>
-                    How It Works
+                    <i class="fas fa-wallet"></i>
+                    Withdraw Your LTC
                 </h2>
-                <div style="display: grid; gap: 1rem;">
-                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                        <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
-                        <div>
-                            <h3 style="font-size: 1rem; font-weight: 600;font-weight: 600;">Earn Fairly</h3>
+                <form id="withdrawal-form" onsubmit="processWithdrawal(); return false;">
+                    <div class="form-group">
+                        <label for="ltc-wallet" class="form-label">Litecoin Wallet Address</label>
+                        <input 
+                            type="text" 
+                            id="ltc-wallet" 
+                            class="form-input" 
+                            placeholder="Enter your LTC wallet address (starts with L/M/3)"
+                        >
+                        <div class="error-text" id="wallet-error">Please enter a valid LTC wallet address</div>
+                    </div>
+                    <button id="withdraw-btn" class="action-btn btn-primary" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                        Withdraw All LTC
+                    </button>
+                </form>
+                <div class="withdrawal-alert" id="withdrawal-msg">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Withdrawal successful!</p>
+                    <p>Sent to: <span id="target-wallet">-</span></p>
+                    <p>Amount sent: <span id="sent-amount">-</span> LTC</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Card -->
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-info-circle"></i>
+                How It Works
+            </h2>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 600;">Earn Fairly</h3>
                         <p style="color: var(--gray); font-size: 0.9rem;">Watch ads fully to get random rewards between 0.00000700 – 0.00000800 LTC.</p>
                     </div>
                 </div>
@@ -662,17 +751,22 @@
     const MAX_REWARD = 0.00000800;
     const LTC_WALLET_MIN_LENGTH = 26;
 
+    // Toggle Hamburger Menu
+    function toggleMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('overlay');
+        mobileMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
     // Show Only Selected Section
     function showSection(sectionId) {
-        // Hide all sections
         const sections = document.querySelectorAll('.content-section');
         sections.forEach(section => section.classList.remove('active'));
         
-        // Remove active class from all nav links
         const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => link.classList.remove('active'));
         
-        // Show selected section and activate nav link
         document.getElementById(sectionId).classList.add('active');
         document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
     }
@@ -774,7 +868,6 @@
         const detailsInput = document.getElementById('contact-details');
         const successMsg = document.getElementById('contact-success');
 
-        // Reset form and show success message
         subjectInput.value = '';
         detailsInput.value = '';
         successMsg.style.display = 'block';
