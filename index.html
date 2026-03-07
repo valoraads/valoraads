@@ -146,6 +146,64 @@
                     </SCRIPT>
                    </div>
                 </div>
+                <!-- BEGIN EZMOB TAG -->
+                <div id = "container-1" class="md:w-5/12">
+                    <div class="bg-dark/80 border border-gray-700 rounded-xl p-3 mb-6 ad-hover">
+                    <h3 class="text-sm text-gray-400 font-medium mb-2 text-center">SPONSORED ADVERTISEMENT</h3>
+                       <script type="text/javascript" src="https://docdn.ezmob.com/prebid.js" async></script>
+<script>
+	var pbjs = pbjs || {};
+	pbjs.que = pbjs.que || [];
+	
+	pbjs.que.push(function() {
+		var adUnits = [{
+			code: 'container-1',
+			mediaTypes: {
+				video: {
+					context: 'outstream',
+					playerSize: [300, 250],
+					renderer: {
+						url: 'https://docdn.ezmob.com/outstream_pb.js',
+						render: renderOutstream
+					}
+				}
+			},
+			bids: [{
+				bidder: 'adkernel',
+				params: {
+				  zoneId: 340394,
+				  host: 'cpm.ezmob.com'
+				}
+
+			}]
+		}];
+		pbjs.addAdUnits(adUnits);
+		pbjs.requestBids({
+			bidsBackHandler: function(bidResponses) {
+				process('container-1');
+			}
+		});
+	});
+
+	function process(adUnit) {
+		var bidResponses = pbjs.getHighestCpmBids(adUnit);
+		if (bidResponses.length == 0) {
+			return;
+		}
+		var bid = bidResponses[0];
+		pbjs.renderAd(document, bid.adId);
+	}
+	
+	function renderOutstream(bid) {
+		OutstreamPlayerPB(bid, {
+			displayMode: 'floating',
+			transitions: true,
+			vpaidMode: 2
+		});
+	}
+</script>
+                    </div>
+                    </div>
                         <!-- Featured Ad -->
                         <div class="md:w-5/12">
                             <div class="bg-dark/80 border border-gray-700 rounded-xl p-3 ad-hover">
@@ -654,9 +712,33 @@ document.addEventListener("click", function() {
 }, { once: true });
 
 </script>
+<script>
+  (function(i,n,p,a,g,e){
+    i.inpagepush = i.inpagepush || function() {
+      (i.inpagepush.q=(i.inpagepush.q||[])).push(arguments)
+    };
+    var s=n.getElementsByTagName('head')[0];
+    var q=n.createElement('script'); q.async=1;
+    q.src='//static.qualiclicks.com/inpage/inpage.js';
+    s.appendChild(q);
+    i.inpagepush('init', {
+      host: 'xml.qualiclicks.com',
+      feed: 1154902,
+      auth : 'GiGp',
+      subid: '',
+      refresh: 120,
+      position: 'top',
+      slots: 2,
+      query : '',
+      nodesrc : true
+    });
+    i.inpagepush('show');
+  })(window, document);
+</script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
+
 
 
 
